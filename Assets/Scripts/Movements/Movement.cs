@@ -4,10 +4,10 @@ using UnityEngine;
 public class SimplePlayerMovement : MonoBehaviour
 {
     public float walkSpeed = 6f;
+    public float sprintSpeed = 12f;
     public float lookSpeed = 2f;
     public float gravity = 10f;
     public Camera playerCamera;
-
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
@@ -21,9 +21,10 @@ public class SimplePlayerMovement : MonoBehaviour
 
     void Update()
     {
+        float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         // Player movement
-        float moveX = Input.GetAxis("Horizontal") * walkSpeed;
-        float moveZ = Input.GetAxis("Vertical") * walkSpeed;
+        float moveX = Input.GetAxis("Horizontal") * speed;
+        float moveZ = Input.GetAxis("Vertical") * speed;
         Vector3 move = transform.TransformDirection(new Vector3(moveX, 0, moveZ));
 
         if (!characterController.isGrounded)
@@ -36,5 +37,11 @@ public class SimplePlayerMovement : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, -45f, 45f);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+        }
+
     }
+
 }
