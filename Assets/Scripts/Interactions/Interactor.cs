@@ -1,52 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-interface IInteractable
-{
-    void Interact();
-}
-
+    interface IInteractable
+    {
+        void Interact();
+    }
 public class Interactor : MonoBehaviour
 {
-    [SerializeField]
-    private Transform InteractroSource;
-    [SerializeField]
-    private float interactrorRange = 4f;
-    [SerializeField]
-    private GameObject interactionText;
-    private Ray r;
+    public Transform Interactorsource;
+    public float Interactrange;
 
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
     void Update()
     {
-
-        r = new Ray(InteractroSource.position, InteractroSource.forward);
-        Debug.DrawRay(InteractroSource.position, InteractroSource.forward * interactrorRange, Color.red, 2f);
-
-        if (Physics.Raycast(r, out RaycastHit hitInfo, interactrorRange))
+        Ray r = new Ray(Interactorsource.position, Interactorsource.forward);
+        if (Physics.Raycast(r, out RaycastHit hitInfo, Interactrange))
         {
-            
-
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
-            {
-                Debug.Log("in range");
-                interactionText.SetActive(true);    
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactObj.Interact();
-                }
-            }
-            else
-            {
-                interactionText.SetActive(false);
-                Debug.Log("No interactable obj");
-            }
-
+          if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+          {
+            interactObj.Interact();
+          }
         }
-        else
-        {
-            interactionText.SetActive(false);
-        }
-     
+      
     }
 }
