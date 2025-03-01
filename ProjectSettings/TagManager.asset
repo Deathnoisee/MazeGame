@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
+  - FIRST KEY SHORTCUTS
+  - SECOND KEY SHORTCUTS
+  - thirdKeyShortcuts
   layers:
   - Default
   - TransparentFX
