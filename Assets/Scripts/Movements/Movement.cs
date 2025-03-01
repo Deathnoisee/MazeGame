@@ -37,7 +37,7 @@ public class SimplePlayerMovement : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, -45f, 45f);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
 
         }
