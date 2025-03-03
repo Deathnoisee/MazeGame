@@ -8,6 +8,9 @@ TagManager:
   - FIRST KEY SHORTCUTS
   - SECOND KEY SHORTCUTS
   - thirdKeyShortcuts
+  - Zombie
+  - uWon
+  - trap
   layers:
   - Default
   - TransparentFX

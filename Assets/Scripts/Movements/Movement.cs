@@ -7,10 +7,13 @@ public class SimplePlayerMovement : MonoBehaviour
     public float sprintSpeed = 12f;
     public float lookSpeed = 2f;
     public float jumpForce = 8f;
+    private float jumpCD = 0.2f;
+    private float lastJumpTime;
     public float gravity = 10f;
     public Camera playerCamera;
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
+    public gameOver gameOverHandler;
 
     private float rotationX = 0;
 
@@ -31,18 +34,17 @@ public class SimplePlayerMovement : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical") * speed;
         Vector3 move = transform.TransformDirection(new Vector3(moveX, 0, moveZ));
 
-        if (!characterController.isGrounded)
+         if (characterController.isGrounded)
         {
-            moveDirection.y -= gravity * Time.deltaTime;
-        }
-        else 
-        {
-            moveDirection.y = 0;
-            if (Input.GetButtonDown("Jump"))
+            moveDirection.y = -0.1f; 
+
+            if (Input.GetButton("Jump") && Time.time > lastJumpTime + jumpCD)
             {
                 moveDirection.y = jumpForce;
+                lastJumpTime = Time.time;
             }
         }
+        moveDirection.y -= gravity * Time.deltaTime;
         characterController.Move((move + moveDirection) * Time.deltaTime);
 
         // Camera rotation
@@ -50,7 +52,23 @@ public class SimplePlayerMovement : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, -45f, 45f);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-
+        
+        }
+    }
+   
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Zombie"))
+        {
+            gameOverHandler.gg(gameOver.GameOverType.ZombieTouch);
+        }  
+        if (hit.gameObject.CompareTag("trap"))
+        {
+            gameOverHandler.gg(gameOver.GameOverType.TrapFall);
+        }
+        if (hit.gameObject.CompareTag("uWon"))
+        {
+            gameOverHandler.gg(gameOver.GameOverType.WinGame);
         }
     }
 

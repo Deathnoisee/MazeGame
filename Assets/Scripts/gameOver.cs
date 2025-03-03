@@ -1,5 +1,6 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement; // For reloading the scene or loading a new one
+using UnityEngine.SceneManagement;
 
 public class gameOver : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class gameOver : MonoBehaviour
         WinGame      // Player opened the ending gate and won
     }
 
+    public GameObject zombieTouchUI;
+    public GameObject trapFallUI;
+    public GameObject winGameUI;
+
     // Method to handle game over
     public void gg(GameOverType gameOverType)
     {
@@ -17,33 +22,53 @@ public class gameOver : MonoBehaviour
         {
             case GameOverType.ZombieTouch:
                 Debug.Log("Game Over: You were killed by a zombie!");
-                // Trigger zombie death animation, sound, or UI
+                zombieTouchUI.SetActive(true);
                 break;
 
             case GameOverType.TrapFall:
                 Debug.Log("Game Over: You fell into a trap!");
-                // Trigger trap death animation, sound, or UI
+                trapFallUI.SetActive(true);
                 break;
 
             case GameOverType.WinGame:
                 Debug.Log("You Win: You escaped!");
-                // Trigger win animation, sound, or UI
+                winGameUI.SetActive(true);
                 break;
         }
 
-        // Reload the scene or load a game-over scene
-        ReloadScene();
+        Time.timeScale = 0f; // Pause the game
+
+        // Start the delay coroutine
+        StartCoroutine(HandleGameOverAfterDelay(gameOverType, 5f));
+    }
+
+    // Coroutine to handle game-over actions after a delay
+    private IEnumerator HandleGameOverAfterDelay(GameOverType gameOverType, float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay); // Wait for the delay
+
+        // Handle scene loading based on the game-over type
+        if (gameOverType == GameOverType.WinGame)
+        {
+            LoadGameOverScene(); // Load the MainMenu scene for winning
+        }
+        else
+        {
+            ReloadScene(); // Reload the current scene for other game-over types
+        }
     }
 
     // Reload the current scene
     private void ReloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f; // Unpause the game
     }
 
-    // Optional: Load a specific game-over scene
-    private void LoadGameOverScene()
+    // Load the MainMenu scene
+    public void LoadGameOverScene()
     {
-        SceneManager.LoadScene("GameOverScene"); // Replace with your game-over scene name
+        SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1f; // Unpause the game
     }
 }
