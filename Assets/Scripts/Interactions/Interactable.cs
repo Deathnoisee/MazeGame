@@ -18,7 +18,7 @@ public class Interactable : MonoBehaviour
         outline.enabled = false;
     }
 
-    public void interact()
+    public void Interact()
     {
         if (!isInteracting)
         {
@@ -42,7 +42,6 @@ public class Interactable : MonoBehaviour
         if (text != null) text.gameObject.SetActive(false);
         isInteracting = false;
 
-        // Re-enable "Press E" text only if the outline is enabled and we're not interacting
         if (outline != null && outline.enabled && !isInteracting)
         {
             Debug.Log("Re-enabling 'Press E' text");
@@ -50,17 +49,16 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public void disableOutline()
+    public void DisableOutline()
     {
         outline.enabled = false;
     }
 
-    public void enableOutline()
+    public void EnableOutline()
     {
         outline.enabled = true;
     }
 
-    // Add this method to allow other scripts to check if the object is interacting
     public bool IsInteracting()
     {
         return isInteracting;

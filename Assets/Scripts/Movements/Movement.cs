@@ -58,10 +58,7 @@ public class SimplePlayerMovement : MonoBehaviour
    
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.CompareTag("Zombie"))
-        {
-            gameOverHandler.gg(gameOver.GameOverType.ZombieTouch);
-        }  
+       
         if (hit.gameObject.CompareTag("trap"))
         {
             gameOverHandler.gg(gameOver.GameOverType.TrapFall);

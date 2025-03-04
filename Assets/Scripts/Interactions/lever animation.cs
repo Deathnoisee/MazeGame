@@ -3,9 +3,15 @@ using UnityEngine;
 public class leveranimation : MonoBehaviour
 {
     public Animator animator;
-    
-    public void interact ()
+    private bool isActivated = false;
+
+    public void Interact()
     {
-        animator.SetBool("clicked", true);
+        if (!isActivated)
+        {
+            animator.SetBool("clicked", true);
+            isActivated = true;
+            LeverManager.instance.LeverActivated();
+        }
     }
 }

@@ -12,7 +12,7 @@ public class PlayerInteractions : MonoBehaviour
         {
             if (currentInteractable != null)
             {
-                currentInteractable.interact();
+                currentInteractable.Interact();
             }
         }
     }
@@ -31,7 +31,7 @@ public class PlayerInteractions : MonoBehaviour
 
                 if (currentInteractable && currentInteractable != newInteractable)
                 {
-                    currentInteractable.disableOutline();
+                    currentInteractable.DisableOutline();
                 }
 
                 if (newInteractable.enabled)
@@ -57,9 +57,8 @@ public class PlayerInteractions : MonoBehaviour
     void SetNewCurrentInteractable(Interactable newInteractable)
     {
         currentInteractable = newInteractable;
-        currentInteractable.enableOutline();
+        currentInteractable.EnableOutline();
 
-        // Only enable "Press E" text if the object is not currently interacting
         if (!currentInteractable.IsInteracting())
         {
             HUDController.instance.EnableInteractionText();
@@ -71,7 +70,7 @@ public class PlayerInteractions : MonoBehaviour
         HUDController.instance.DisableInteractionText();
         if (currentInteractable)
         {
-            currentInteractable.disableOutline();
+            currentInteractable.DisableOutline();
             currentInteractable = null;
         }
     }
