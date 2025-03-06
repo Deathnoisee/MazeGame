@@ -3,6 +3,8 @@ using UnityEngine;
 public class ZombieCollision : MonoBehaviour
 {
     public gameOver gameOverHandler;
+    
+
 
     private void OnTriggerEnter(Collider other)
     {
