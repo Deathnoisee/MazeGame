@@ -24,8 +24,8 @@ public class EnemyAiTutorial : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        src.clip = sfx1; // Set the clip once in Awake
-        src.loop = true; // Ensure the sound loops
+        src.clip = sfx1; 
+        src.loop = true; 
     }
 
     private void Update()
@@ -38,7 +38,7 @@ public class EnemyAiTutorial : MonoBehaviour
             {
                 isChasing = false;
                 src.Stop(); // Stop the zombie sound when not chasing
-                StartCoroutine(BGMManager.instance.AdjustPitchSmoothly(1.0f, 1f)); // Smoothly reset BGM pitch to normal
+                StartCoroutine(BGMManager.instance.AdjustPitchSmoothly(1.0f, 1f));
             }
             Patroling();
         }
@@ -47,8 +47,8 @@ public class EnemyAiTutorial : MonoBehaviour
             if (!isChasing)
             {
                 isChasing = true;
-                src.Play(); // Play the zombie sound when chasing
-                StartCoroutine(BGMManager.instance.AdjustPitchSmoothly(0.75f, 1f)); // Smoothly slow down BGM pitch
+                src.Play(); 
+                StartCoroutine(BGMManager.instance.AdjustPitchSmoothly(0.75f, 1f)); 
             }
             ChasePlayer();
         }
@@ -73,16 +73,22 @@ public class EnemyAiTutorial : MonoBehaviour
     }
 
     private void SearchWalkPoint()
-    {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+{
+    float randomZ = Random.Range(-walkPointRange, walkPointRange);
+    float randomX = Random.Range(-walkPointRange, walkPointRange);
+    Vector3 randomPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-        {
-            walkPointSet = true;
-        }
+    NavMeshHit hit;
+    if (NavMesh.SamplePosition(randomPoint, out hit, walkPointRange, NavMesh.AllAreas))
+    {
+        walkPoint = hit.position;
+        walkPointSet = true;
     }
+    else
+    {
+        walkPointSet = false; // If no valid point is found, try again in the next frame
+    }
+}
 
     private void ChasePlayer()
     {
