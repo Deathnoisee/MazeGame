@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    public float playerReach = 3f;
+    public float playerReach = 5f;
     Interactable currentInteractable;
 
     void Update()

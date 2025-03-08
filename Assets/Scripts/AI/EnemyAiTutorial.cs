@@ -72,7 +72,17 @@ public class EnemyAiTutorial : MonoBehaviour
         }
         else
         {
+            NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(walkPoint, path);
+
+        if (path.status == NavMeshPathStatus.PathComplete)
+        {
             agent.SetDestination(walkPoint);
+        }
+        else
+        {
+            walkPointSet = false; // Invalid path, find a new one
+        }
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
@@ -89,7 +99,7 @@ public class EnemyAiTutorial : MonoBehaviour
     Vector3 randomPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
     NavMeshHit hit;
-    if (NavMesh.SamplePosition(randomPoint, out hit, walkPointRange, NavMesh.AllAreas))
+    if (NavMesh.SamplePosition(randomPoint, out hit, 5f, NavMesh.AllAreas))
     {
         walkPoint = hit.position;
         walkPointSet = true;
