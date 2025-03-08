@@ -68,6 +68,8 @@ public class gameOver : MonoBehaviour
     // Load the MainMenu scene
     public void LoadGameOverScene()
     {
+        Cursor.lockState = CursorLockMode.None;
+        BGMManager.instance.StopMusic();
         SceneManager.LoadScene("MainMenu");
         Time.timeScale = 1f; // Unpause the game
     }

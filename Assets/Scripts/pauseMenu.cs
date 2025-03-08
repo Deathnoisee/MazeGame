@@ -21,12 +21,10 @@ public class PauseMenu : MonoBehaviour
             if (GameIsPaused)
             {
                 Resume();
-                crosshair.SetActive(true);
             }
             else
             {
                 Pause();
-                crosshair.SetActive(false);
             }
         }
     }
@@ -35,13 +33,19 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
         GameIsPaused = false;
+        BGMManager.instance.StartMusic();
+        crosshair.SetActive(true);
     }
     void Pause()
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
         GameIsPaused = true;
+        BGMManager.instance.StopMusic();
+        crosshair.SetActive(false);
     }
 
     public void LoadMenu()

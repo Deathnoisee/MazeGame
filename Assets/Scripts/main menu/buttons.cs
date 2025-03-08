@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("SampleScene"); // Change "GameScene" to your actual scene name
+        BGMManager.instance.StartMusic();
     }
 
     // Opens the options panel
@@ -54,4 +55,16 @@ public class MainMenu : MonoBehaviour
             button.SetActive(state);
         }
     }
+    public void QuitToMainMenu()
+    {
+        // Stop the background music
+        if (BGMManager.instance != null)
+        {
+            BGMManager.instance.StopMusic();
+        }
+
+        // Load the main menu scene
+        SceneManager.LoadScene("MainMenu"); // Replace with your actual main menu scene name
+    }
+
 }

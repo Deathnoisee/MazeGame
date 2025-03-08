@@ -6,6 +6,7 @@ public class BGMManager : MonoBehaviour
     public static BGMManager instance; // Singleton instance
 
     public AudioSource bgmAudioSource; // Reference to the AudioSource component
+    private float musicPosition = 0f;
 
     private void Awake()
     {
@@ -46,5 +47,26 @@ public class BGMManager : MonoBehaviour
     public void ResetBGMPitch()
     {
         bgmAudioSource.pitch = 1.0f; // Reset to normal speed
+    }
+
+    // Stop the background music
+    public void StopMusic()
+    {
+        if (bgmAudioSource.isPlaying)
+        {
+            musicPosition = bgmAudioSource.time;
+            bgmAudioSource.Stop(); // Stop the music if it's playing
+
+        }
+    }
+
+    // Start the background music
+    public void StartMusic()
+    {
+        if (!bgmAudioSource.isPlaying)
+        {
+            bgmAudioSource.Play(); // Play the music if it's not already playing
+            bgmAudioSource.time = musicPosition;
+        }
     }
 }
