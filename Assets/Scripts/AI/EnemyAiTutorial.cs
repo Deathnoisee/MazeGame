@@ -1,11 +1,14 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyAiTutorial : MonoBehaviour
 {
     public AudioSource src;
+    public float rotationSpeed = 500f;
     public AudioClip sfx1;
     public NavMeshAgent agent;
+    public Animator animator;
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -31,7 +34,14 @@ public class EnemyAiTutorial : MonoBehaviour
     private void Update()
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-
+        if (agent.isOnOffMeshLink)
+        {
+           StartCoroutine(HandleJump());
+        }
+        else
+        {
+            animator.SetBool("jump", false); // Stop the jump animation
+        }
         if (!playerInSightRange)
         {
             if (isChasing)
@@ -92,6 +102,51 @@ public class EnemyAiTutorial : MonoBehaviour
 
     private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
+    Vector3 directionToPlayer = (player.position - transform.position).normalized;
+
+    // Check if there is a direct line of sight to the player
+    if (!Physics.Raycast(transform.position, directionToPlayer, Vector3.Distance(transform.position, player.position), whatIsGround))
+    {
+        agent.SetDestination(player.position); // Move directly to player
     }
+    else
+    {
+        // If path is blocked, find a valid alternative path
+        if (agent.pathStatus == NavMeshPathStatus.PathPartial || agent.pathStatus == NavMeshPathStatus.PathInvalid)
+        {
+            SearchWalkPoint(); // Patrol around until a clear path is found
+        }
+        else
+        {
+            agent.SetDestination(player.position); // Continue chasing
+        }
+    }
+    }
+
+        private IEnumerator HandleJump()
+    {
+    OffMeshLinkData linkData = agent.currentOffMeshLinkData; // Get jump data
+    Vector3 startPos = agent.transform.position;
+    Vector3 endPos = linkData.endPos + Vector3.up * agent.baseOffset; // Target landing position
+
+    agent.isStopped = true;
+    animator.SetBool("jump", true);
+
+    float jumpDuration = 0.5f; // Adjust based on your animation
+    float elapsedTime = 0f;
+
+    while (elapsedTime < jumpDuration)
+    {
+        agent.transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / jumpDuration);
+        elapsedTime += Time.deltaTime;
+        yield return null;
+    }
+
+    agent.transform.position = endPos; // Ensure correct final position
+    animator.SetBool("jump", false);
+    agent.isStopped = false;
+    agent.CompleteOffMeshLink();
+}
+
+
 }
